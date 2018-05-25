@@ -1,7 +1,6 @@
 #---------------------------------------------------------------------------------------------
-###THIS IS AN EXAMPLE CODE FOR THE ANALYSIS OF AFFYMETRIX GENE MICROARRAYS
+## THIS IS AN EXAMPLE CODE FOR THE ANALYSIS OF AFFYMETRIX GENE MICROARRAYS
 #---------------------------------------------------------------------------------------------
-
 
 #---------------------------------------------------------------------------------------------
 ###FOLDER DESTINATION DEFINITIONS
@@ -9,7 +8,7 @@
 workingDir <-getwd() # Remember to first do Session/Set working directory
 dataDir <- file.path(workingDir, "/datasets")
 resultsDir <- file.path(workingDir, "/results")
-setwd(resultsDir)
+setwd(workingDir)
 
 
 #---------------------------------------------------------------------------------------------
@@ -30,11 +29,10 @@ installifnot("mogene10sttranscriptcluster.db")
 installifnot("oligo")
 installifnot("limma")
 installifnot("Biobase")
-installifnot("arrayQualityMetrics")
+# installifnot("arrayQualityMetrics")
 installifnot("genefilter")
 installifnot("multtest")
 installifnot("annotate")
-installifnot("xtable")
 installifnot("gplots")
 installifnot("scatterplot3d")
 
@@ -51,6 +49,7 @@ targets
 CELfiles<-list.celfiles(file.path(dataDir))
 CELfiles
 rawData<-read.celfiles(file.path(dataDir,CELfiles))
+rawData
 
 #DEFINE SOME VARIABLES FOR PLOTS
 sampleNames <- as.character(targets$ShortName)
@@ -102,8 +101,8 @@ dev.off()
 #---------------------------------------------------------------------------------------------
 ###DATA NORMALIZATION
 #---------------------------------------------------------------------------------------------
+require(oligo)
 eset<-rma(rawData)
-
 write.exprs(eset,"NormData.txt")
 
 
@@ -120,20 +119,6 @@ clust.euclid.average <- hclust(dist(t(exprs(eset))),method="average")
 plot(clust.euclid.average, labels=sampleNames, main="Hierarchical clustering of NormData", 
      cex=0.7,  hang=-1)
 
-#PRINCIPAL COMPONENT ANALYSIS
-plotPCA <- function ( X, labels=NULL, colors=NULL, dataDesc="", scale=FALSE, formapunts=NULL, myCex=0.8,...)
-{
-  pcX<-prcomp(t(X), scale=scale) # o prcomp(t(X))
-  loads<- round(pcX$sdev^2/sum(pcX$sdev^2)*100,1)
-  xlab<-c(paste("PC1",loads[1],"%"))
-  ylab<-c(paste("PC2",loads[2],"%"))
-  if (is.null(colors)) colors=1
-  plot(pcX$x[,1:2],xlab=xlab,ylab=ylab, col=colors, pch=formapunts, 
-       xlim=c(min(pcX$x[,1])-10, max(pcX$x[,1])+10),ylim=c(min(pcX$x[,2])-10, max(pcX$x[,2])+10))
-  text(pcX$x[,1],pcX$x[,2], labels, pos=3, cex=myCex)
-  title(paste("Plot of first 2 PCs for expressions in", dataDesc, sep=" "), cex=0.8)
-}
-
 plotPCA(exprs(eset), labels=sampleNames, dataDesc="NormData", colors=sampleColor,
         formapunts=c(rep(16,4),rep(17,4)), myCex=0.6)
 
@@ -148,13 +133,12 @@ plotPCA(exprs(eset), labels=sampleNames, dataDesc="selected samples", colors=sam
 dev.off()
 
 #ARRAY QUALITY METRICS
-arrayQualityMetrics(eset,  reporttitle="QualityControl", force=TRUE)
-
+# arrayQualityMetrics(eset,  reporttitle="QualityControl", force=TRUE)
 
 #---------------------------------------------------------------------------------------------
 ###FILTER OUT THE DATA
 #---------------------------------------------------------------------------------------------
-
+library(genefilter)
 annotation(eset) <- "org.Mm.eg.db"
 eset_filtered <- nsFilter(eset, var.func=IQR,
          var.cutoff=0.75, var.filter=TRUE,
@@ -170,6 +154,7 @@ print(eset)
 #---------------------------------------------------------------------------------------------
 ###DIFERENTIAL EXPRESSED GENES SELECTION. LINEAR MODELS. COMPARITIONS
 #---------------------------------------------------------------------------------------------
+library(limma)
 
 #CONTRAST MATRIX.lINEAR MODEL
 treat<- targets$grupos
@@ -201,9 +186,6 @@ topTab <-  topTable (fit.main1, number=nrow(fit.main1), coef="Induced.vs.WT", ad
 #EXPORTED TO CSV AND HTML FILE
 write.csv2(topTab, file=paste("Selected.Genes.in.comparison.",comparison1,".csv", sep=""))
 
-print(xtable(topTab,align="lllllll"),type="html",html.table.attributes="",
-      file=paste("Selected.Genes.in.comparison.",comparison1,".html", sep=""))
-
 #---------------------------------------------------------------------------------------------
 ###VOLCANO PLOTS
 #---------------------------------------------------------------------------------------------
@@ -220,7 +202,7 @@ abline(v=c(-1,1))
 dev.off()
 
 #---------------------------------------------------------------------------------------------
-###HEATMAP PLOTS
+### HEATMAP PLOTS
 #---------------------------------------------------------------------------------------------
 
 #PREPARE THE DATA
@@ -235,6 +217,7 @@ head(HMdata2)
 write.csv2(HMdata2, file="Data2HM.csv")
 
 #HEATMAP PLOT
+library (gplots)
 my_palette <- colorRampPalette(c("blue", "red"))(n = 299) # creates a own color palette from red to green
 heatmap.2(HMdata2,
           Rowv=TRUE,
@@ -276,7 +259,7 @@ dev.off()
 #---------------------------------------------------------------------------------------------
 ###DATA ANNOTATION
 #---------------------------------------------------------------------------------------------
-
+library(mogene10sttranscriptcluster.db)
 all_anota<-data.frame(exprs(eset))
 Annot <- data.frame(SYMBOL=sapply(contents(mogene10sttranscriptclusterSYMBOL), paste, collapse=", "),
                     DESC=sapply(contents(mogene10sttranscriptclusterGENENAME), paste, collapse=", "))
