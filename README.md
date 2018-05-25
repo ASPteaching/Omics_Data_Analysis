@@ -30,7 +30,9 @@ The lab session will do three things
 	- Analyze data under this design.
 	
 - This illustration will be done using the most classic omics data, expression microarrays. Some supporting materials about microarrays 
-can be found in the "Materials/Microarrays" folder
+can be found in the "lab-1-Microarrays" folder.
+
+	- Additional information can be found in [https://github.com/alexsanchezpla/StatisticalAnalysisOfMicroarrayData](https://github.com/alexsanchezpla/StatisticalAnalysisOfMicroarrayData)
 
 
 		
