@@ -1,0 +1,24 @@
+---
+title: "Batch Effects"
+author: "Alex Sanchez (asanchez@ub.edu)"
+date: "June 2018"
+output: 
+  slidy_presentation: 
+    highlight: pygments
+footer: "Omics Techniques. Bioinformatics Degree"
+keep_md: true
+---
+
+
+# Introduction 
+
+ - Batch effects (Leek et al., 2010): *sub-groups of measurements that have qualitatively different behaviour
+across conditions and are unrelated to the biological or scientific variables in a study* . 
+
+    + Batch effects can arise from taking measurements in different laboratory conditions, at different dates, with
+different reagent lots, manipulated by different technical staff, etc. 
+
+    + With an appropriate __block design__ batch effects can be identified, adjusted and eventually corrected.
+
+    + In the worst case of a bad experimental design, batch effects can potentially be correlated to the outcome
+of interest and lead the researcher to incorrect conclusions.
