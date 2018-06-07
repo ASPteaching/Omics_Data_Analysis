@@ -2,7 +2,7 @@
 
 This repository is intended to support some sessions in the "Omics Techniques" course in the Bioinformatics degree. Overall this block deals with distinct aspects of quality checking in Omics studies.  
 
-1. **Experimental** design. Instead of looking for problems in the data try to avoid them from the begining of the study. An appropriate experimental design can help researchers get the most from their data and alo avoid common error such as confusion between effects.
+1. **Experimental design**. Instead of looking for problems in the data try to avoid them from the begining of the study. An appropriate experimental design can help researchers get the most from their data and alo avoid common error such as confusion between effects.
 
 2. **Batch effect detection and removal**. One of most common problems in omics techniques is that, conciously or unadvertedly, samples are often generated in batches. Experimental design may be used to control known batches. There may be, however,  unknown ones which must be detected and whose effects must be removed.
 
@@ -10,7 +10,10 @@ This repository is intended to support some sessions in the "Omics Techniques" c
 
 ## Experimental design
 
-These slides shows an introduction to experimental design concepts.
+There are two slides sets
+
+- The first set (Session 1) is an introduction to experimental design and experimental design principles
+- The second set (Session 2) contains an introduction to linear models and its relation with experimental design
 
 The lab session will do three things
 
@@ -22,8 +25,6 @@ The lab session will do three things
 	-  R markdown
 	-  github
 	
-## Experimental design lab
-
 - In this lab we will explore how linear modelling can be used to
 
 	- Deploy a certain experimental design in an omics study
