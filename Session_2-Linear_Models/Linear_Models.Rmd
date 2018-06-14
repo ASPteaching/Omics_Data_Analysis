@@ -253,7 +253,10 @@ The choice of design matrix is a critical step in linear modeling as it encodes 
 
 ----
 
-Suppose we have two groups, 1 and 2, with two samples each. We might start to encode this experimental design like so:
+## Model matrix for two groups
+
+- Suppose we have two groups, 1 and 2, with two samples each. 
+- We might start to encode this experimental design like so:
 
 
 ```{r}
@@ -262,9 +265,9 @@ f <- formula(~ x)
 f
 ```
 
-Note that an intercept will be included by default, so the formula could equivalently be written: `~ x + 1`.
+- Note that an intercept will be included by default, so the formula could equivalently be written: `~ x + 1`.
 
-We can then inspect the design matrix which is formed by this:
+- We can then inspect the design matrix which is formed by this:
 
 ```{r}
 model.matrix(f)
@@ -272,62 +275,92 @@ model.matrix(f)
 
 ----
 
-Note, this is not the design matrix we wanted.
+## model.matrix requires factors
 
-We should instead first tell R that these values should not be interpreted numerically, but as different levels of a factor variable:
+- Note, this is not the design matrix we wanted. 
+- We should instead first tell R that these values should not be interpreted numerically, but as different levels of a factor variable:
 
 ```{r}
 x <- factor(c(1,1,2,2))
 model.matrix(~ x)
 ```
 
-Now we have achieved the correct design matrix.
+- Now we have achieved the correct design matrix.
+- Or have we?
 
 ----
 
-# More groups
+## The role of the intercept term
 
-Here we show the design matrix for an experiment with three groups:
+- Note that the previous matrix has one intercept column and one group column although there are two groups indeed.
+    + The first group's values are represented by the basal or "overall mean". 
+    + The second group's are represented by one column.
+- An alternative representation is possible setting the intercept to zero.
+```{r}
+x <- factor(c(1,1,2,2))
+model.matrix(~ x + 0)
+```
+
+- Both representations are equivalent and for one-factor designs it's up to you which one to choose
+
+
+# Design matrix for more than 2 groups
+
+- How is the design matrix for an experiment with 3 groups?
+- We proceed like in the previous case
 
 ```{r}
 x <- factor(c(1,1,2,2,3,3))
 model.matrix(~ x)
 ```
 
-Now we have a third column which specifies which samples belong to the third group.
+- Again the first group is implicit in the intercept but it can be set explicitly by setting the intercept to zero.
 
 ----
 
-An alternate formulation of design matrix is possible by specifying `+ 0` in the  formula:
+- An alternate formulation of design matrix is possible by specifying `+0` in the  formula:
 
 ```{r}
 x <- factor(c(1,1,2,2,3,3))
 model.matrix(~ x + 0)
 ```
-
-This group now fits a separate coefficient for each group. 
-
-In order to compare the levels to each other, we need to use some additional steps, which is called __the construction of contrasts__. These are covered in a presentation provided after this one or in the `limma` package vignette for microarray analysis with multiple groups.
+This representation allows fitting a separate coefficient for each group. 
 
 ----
 
-# More variables
+# Design matrices for more complex designs
 
-We can simply add additional variables with a `+` sign, in order to build a design matrix which fits based on the information in additional variables:
+- Matrices for more complex designs can be built easily by 
+    + First creating the corresponding factors with their levels and then
+    + Applying model.matrix on a formula that describes the design
+    
+- For example for a $2\times2$ design without interaction::
 
 ```{r}
 x <- factor(c(1,1,1,1,2,2,2,2))
 y <- factor(c("a","a","b","b","a","a","b","b"))
-model.matrix(~ x + y)
+mm<- model.matrix(~ x + y)
 ```
 
-We could say that this linear model accounts for differences in both the x and y variables.
-
-We assume in the above model specification, that the effect of the x and y variables are simply additive. Being in group 2 and group b is equal to the difference between 2 and 1 and the difference between b and a. 
+- We could say that this linear model accounts for differences in both the x and y variables.
+- We assume in the above model specification, that the effect of the x and y variables are simply additive. Being in group 2 and group b is equal to the difference between 2 and 1 and the difference between b and a. 
 
 ----
 
-Another model is possible which fits and additional term, which encodes the potential interaction of x and y variables. This can be written in either of the following two formula:
+```{r}
+x <- factor(c(1,1,1,1,2,2,2,2))
+y <- factor(c("a","a","b","b","a","a","b","b"))
+model.matrix(~ 0+ x + y)
+```
+
+- Notice that adding a 0 term only provides two columns for the first factor
+
+----
+
+## Design matrix for designs with interaction term
+
+- Another model is possible which fits and additional term, which encodes the potential interaction of x and y variables. 
+- This can be written in either of the following two formula:
 
 ```{r}
 model.matrix(~ x + y + x:y)
@@ -336,9 +369,14 @@ model.matrix(~ x*y)
 
 # Linear models for microarray data
 
-To see an extended presentation of linear models and its application to (continuos) omics data matrices you can give a look to the following presentation:
+- For the analysis of omics data a very popular option is the `limma` package.
+- `limma` extends some R functionalities to make them easy to use in the analysis of omics data using linear models.
+- Besides this it includes extensions to the standard linear model to improve analysis capabilities.
+- In the following we show
+    + How to create a design matrix from a "targets" file containing information on groups.
+    + How to create a contrasts matrix to define the comparisons to be done.
+    + How to do the comparisons and how to interpret the resulting analysis tables.
 
-[Linear Models for microarrays](Materials/2017LinearModelsForDifferentialExpression-1ColorOnly.pdf)
 
 
 

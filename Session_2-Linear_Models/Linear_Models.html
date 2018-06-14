@@ -286,13 +286,19 @@ Y_N
 </div>
 <div class="slide section level1">
 
-<p>Suppose we have two groups, 1 and 2, with two samples each. We might start to encode this experimental design like so:</p>
+<h2 id="model-matrix-for-two-groups">Model matrix for two groups</h2>
+<ul>
+<li>Suppose we have two groups, 1 and 2, with two samples each.</li>
+<li>We might start to encode this experimental design like so:</li>
+</ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>)
 f &lt;-<span class="st"> </span><span class="kw">formula</span>(~<span class="st"> </span>x)
 f</code></pre></div>
 <pre><code>## ~x</code></pre>
-<p>Note that an intercept will be included by default, so the formula could equivalently be written: <code>~ x + 1</code>.</p>
-<p>We can then inspect the design matrix which is formed by this:</p>
+<ul>
+<li><p>Note that an intercept will be included by default, so the formula could equivalently be written: <code>~ x + 1</code>.</p></li>
+<li><p>We can then inspect the design matrix which is formed by this:</p></li>
+</ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">model.matrix</span>(f)</code></pre></div>
 <pre><code>##   (Intercept) x
 ## 1           1 1
@@ -304,8 +310,11 @@ f</code></pre></div>
 </div>
 <div class="slide section level1">
 
-<p>Note, this is not the design matrix we wanted.</p>
-<p>We should instead first tell R that these values should not be interpreted numerically, but as different levels of a factor variable:</p>
+<h2 id="model.matrix-requires-factors">model.matrix requires factors</h2>
+<ul>
+<li>Note, this is not the design matrix we wanted.</li>
+<li>We should instead first tell R that these values should not be interpreted numerically, but as different levels of a factor variable:</li>
+</ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>))
 <span class="kw">model.matrix</span>(~<span class="st"> </span>x)</code></pre></div>
 <pre><code>##   (Intercept) x2
@@ -318,11 +327,44 @@ f</code></pre></div>
 ## attr(,&quot;contrasts&quot;)
 ## attr(,&quot;contrasts&quot;)$x
 ## [1] &quot;contr.treatment&quot;</code></pre>
-<p>Now we have achieved the correct design matrix.</p>
+<ul>
+<li>Now we have achieved the correct design matrix.</li>
+<li>Or have we?</li>
+</ul>
 </div>
-<div id="more-groups" class="slide section level1">
-<h1>More groups</h1>
-<p>Here we show the design matrix for an experiment with three groups:</p>
+<div class="slide section level1">
+
+<h2 id="the-role-of-the-intercept-term">The role of the intercept term</h2>
+<ul>
+<li>Note that the previous matrix has one intercept column and one group column although there are two groups indeed.
+<ul>
+<li>The first group’s values are represented by the basal or “overall mean”.</li>
+<li>The second group’s are represented by one column.</li>
+</ul></li>
+<li>An alternative representation is possible setting the intercept to zero.</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>))
+<span class="kw">model.matrix</span>(~<span class="st"> </span>x +<span class="st"> </span><span class="dv">0</span>)</code></pre></div>
+<pre><code>##   x1 x2
+## 1  1  0
+## 2  1  0
+## 3  0  1
+## 4  0  1
+## attr(,&quot;assign&quot;)
+## [1] 1 1
+## attr(,&quot;contrasts&quot;)
+## attr(,&quot;contrasts&quot;)$x
+## [1] &quot;contr.treatment&quot;</code></pre>
+<ul>
+<li>Both representations are equivalent and for one-factor designs it’s up to you which one to choose</li>
+</ul>
+</div>
+<div id="design-matrix-for-more-than-2-groups" class="slide section level1">
+<h1>Design matrix for more than 2 groups</h1>
+<ul>
+<li>How is the design matrix for an experiment with 3 groups?</li>
+<li>We proceed like in the previous case</li>
+</ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">3</span>))
 <span class="kw">model.matrix</span>(~<span class="st"> </span>x)</code></pre></div>
 <pre><code>##   (Intercept) x2 x3
@@ -337,11 +379,15 @@ f</code></pre></div>
 ## attr(,&quot;contrasts&quot;)
 ## attr(,&quot;contrasts&quot;)$x
 ## [1] &quot;contr.treatment&quot;</code></pre>
-<p>Now we have a third column which specifies which samples belong to the third group.</p>
+<ul>
+<li>Again the first group is implicit in the intercept but it can be set explicitly by setting the intercept to zero.</li>
+</ul>
 </div>
 <div class="slide section level1">
 
-<p>An alternate formulation of design matrix is possible by specifying <code>+ 0</code> in the formula:</p>
+<ul>
+<li>An alternate formulation of design matrix is possible by specifying <code>+0</code> in the formula:</li>
+</ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">3</span>))
 <span class="kw">model.matrix</span>(~<span class="st"> </span>x +<span class="st"> </span><span class="dv">0</span>)</code></pre></div>
 <pre><code>##   x1 x2 x3
@@ -356,38 +402,59 @@ f</code></pre></div>
 ## attr(,&quot;contrasts&quot;)
 ## attr(,&quot;contrasts&quot;)$x
 ## [1] &quot;contr.treatment&quot;</code></pre>
-<p>This group now fits a separate coefficient for each group.</p>
-<p>In order to compare the levels to each other, we need to use some additional steps, which is called <strong>the construction of contrasts</strong>. These are covered in a presentation provided after this one or in the <code>limma</code> package vignette for microarray analysis with multiple groups.</p>
+<p>This representation allows fitting a separate coefficient for each group.</p>
 </div>
-<div id="more-variables" class="slide section level1">
-<h1>More variables</h1>
-<p>We can simply add additional variables with a <code>+</code> sign, in order to build a design matrix which fits based on the information in additional variables:</p>
+<div id="design-matrices-for-more-complex-designs" class="slide section level1">
+<h1>Design matrices for more complex designs</h1>
+<ul>
+<li>Matrices for more complex designs can be built easily by
+<ul>
+<li>First creating the corresponding factors with their levels and then</li>
+<li>Applying model.matrix on a formula that describes the design</li>
+</ul></li>
+<li>For example for a <span class="math inline">\(2\times2\)</span> design without interaction::</li>
+</ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>))
 y &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;a&quot;</span>,<span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>,<span class="st">&quot;b&quot;</span>,<span class="st">&quot;a&quot;</span>,<span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>,<span class="st">&quot;b&quot;</span>))
-<span class="kw">model.matrix</span>(~<span class="st"> </span>x +<span class="st"> </span>y)</code></pre></div>
-<pre><code>##   (Intercept) x2 yb
-## 1           1  0  0
-## 2           1  0  0
-## 3           1  0  1
-## 4           1  0  1
-## 5           1  1  0
-## 6           1  1  0
-## 7           1  1  1
-## 8           1  1  1
+mm&lt;-<span class="st"> </span><span class="kw">model.matrix</span>(~<span class="st"> </span>x +<span class="st"> </span>y)</code></pre></div>
+<ul>
+<li>We could say that this linear model accounts for differences in both the x and y variables.</li>
+<li>We assume in the above model specification, that the effect of the x and y variables are simply additive. Being in group 2 and group b is equal to the difference between 2 and 1 and the difference between b and a.</li>
+</ul>
+</div>
+<div class="slide section level1">
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>))
+y &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;a&quot;</span>,<span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>,<span class="st">&quot;b&quot;</span>,<span class="st">&quot;a&quot;</span>,<span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>,<span class="st">&quot;b&quot;</span>))
+<span class="kw">model.matrix</span>(~<span class="st"> </span><span class="dv">0</span>+<span class="st"> </span>x +<span class="st"> </span>y)</code></pre></div>
+<pre><code>##   x1 x2 yb
+## 1  1  0  0
+## 2  1  0  0
+## 3  1  0  1
+## 4  1  0  1
+## 5  0  1  0
+## 6  0  1  0
+## 7  0  1  1
+## 8  0  1  1
 ## attr(,&quot;assign&quot;)
-## [1] 0 1 2
+## [1] 1 1 2
 ## attr(,&quot;contrasts&quot;)
 ## attr(,&quot;contrasts&quot;)$x
 ## [1] &quot;contr.treatment&quot;
 ## 
 ## attr(,&quot;contrasts&quot;)$y
 ## [1] &quot;contr.treatment&quot;</code></pre>
-<p>We could say that this linear model accounts for differences in both the x and y variables.</p>
-<p>We assume in the above model specification, that the effect of the x and y variables are simply additive. Being in group 2 and group b is equal to the difference between 2 and 1 and the difference between b and a.</p>
+<ul>
+<li>Notice that adding a 0 term only provides two columns for the first factor</li>
+</ul>
 </div>
 <div class="slide section level1">
 
-<p>Another model is possible which fits and additional term, which encodes the potential interaction of x and y variables. This can be written in either of the following two formula:</p>
+<h2 id="design-matrix-for-designs-with-interaction-term">Design matrix for designs with interaction term</h2>
+<ul>
+<li>Another model is possible which fits and additional term, which encodes the potential interaction of x and y variables.</li>
+<li>This can be written in either of the following two formula:</li>
+</ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">model.matrix</span>(~<span class="st"> </span>x +<span class="st"> </span>y +<span class="st"> </span>x:y)</code></pre></div>
 <pre><code>##   (Intercept) x2 yb x2:yb
 ## 1           1  0  0     0
@@ -427,8 +494,17 @@ y &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">
 </div>
 <div id="linear-models-for-microarray-data" class="slide section level1">
 <h1>Linear models for microarray data</h1>
-<p>To see an extended presentation of linear models and its application to (continuos) omics data matrices you can give a look to the following presentation:</p>
-<p><a href="Materials/2017LinearModelsForDifferentialExpression-1ColorOnly.pdf">Linear Models for microarrays</a></p>
+<ul>
+<li>For the analysis of omics data a very popular option is the <code>limma</code> package.</li>
+<li><code>limma</code> extends some R functionalities to make them easy to use in the analysis of omics data using linear models.</li>
+<li>Besides this it includes extensions to the standard linear model to improve analysis capabilities.</li>
+<li>In the following we show
+<ul>
+<li>How to create a design matrix from a “targets” file containing information on groups.</li>
+<li>How to create a contrasts matrix to define the comparisons to be done.</li>
+<li>How to do the comparisons and how to interpret the resulting analysis tables.</li>
+</ul></li>
+</ul>
 </div>
 
   <!-- dynamically load mathjax for compatibility with self-contained -->
