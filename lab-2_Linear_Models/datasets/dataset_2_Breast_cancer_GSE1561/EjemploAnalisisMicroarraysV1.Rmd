@@ -98,7 +98,7 @@ En este ejemplo, dado que se realizaran tres comparaciones que luego deseamos co
 et al. (2004) basado en la utilización del modelo lineal general combinada con
 un método para obtener una estimación mejorada de la varianza.
 
-### Matrices de diseño y de contrastes
+## Matrices de diseño y de contrastes
 
 El primer paso para el análisis basado en modelos lineales es crear la matriz
 de diseño. Básicamente se trata de una tabla que describe la asignación de cada
@@ -140,7 +140,7 @@ cont.matrix <- makeContrasts (
 print(cont.matrix)
 ```
 
-### Estimación del modelo y selección de genes
+## Estimación del modelo y selección de genes
 
 Una vez definida la matriz de diseño y los contrastes podemos pasar a estimar el modelo, estimar los contrastes y realizar las pruebas de significación
 que nos indiquen, para cada gen y cada comparación, si puede considerarse
@@ -173,13 +173,34 @@ topTab_AvsL <- topTable (fit.main, number=nrow(fit.main), coef="AvsL", adjust="f
 topTab_BvsL  <- topTable (fit.main, number=nrow(fit.main) , coef="BvsL", adjust="fdr"); head(topTab_BvsL)
 ```
 
+## Anotacion de resultados
+
+__Si se dispone del paquete de anotaciones__ se puede transformar los identificadores de "probesets" en identificadores mas claros como `Gene Symbol`.
+
+```{r}
+annotatedTopTable <- function(topTab, anotPackage)
+{
+  topTab <- cbind(PROBEID=rownames(topTab), topTab)
+  myProbes <- rownames(topTab)
+  thePackage <- eval(parse(text = anotPackage))
+  geneAnots <- select(thePackage, myProbes, c("SYMBOL", "ENTREZID", "GENENAME"))
+  annotatedTopTab<- merge(x=geneAnots, y=topTab, by.x="PROBEID", by.y="PROBEID")
+return(annotatedTopTab)
+}
+
+topAnnotated_AvsB <- annotatedTopTable(topTab_AvsB, anotPackage="hgu133a.db")
+topAnnotated_AvsL <- annotatedTopTable(topTab_AvsL, anotPackage="hgu133a.db")
+topAnnotated_BvsL <- annotatedTopTable(topTab_BvsL, anotPackage="hgu133a.db")
+```
+
+## Visualización de resultados
+
 Un volcano-plot es una figuras que permite visualizar si hay muchos o pocos
 genes con un gran fold-change y significativamente expresados o si este número
 es bajo. Estos gráficos representa en abscisas los cambios de expresión en escala
 logarı́tmica y en ordenadas el “menos logaritmo” del p-valor o alternativamente
 el estadı́stico B (“log-odds”).
 
-__Si se dispone del paquete de anotaciones__ se puede transformar los identificadores de "probesets" en identificadores mas claros como Gene Symbol.
 
 ```{r, volcano}
 annotation(eset_rma)
