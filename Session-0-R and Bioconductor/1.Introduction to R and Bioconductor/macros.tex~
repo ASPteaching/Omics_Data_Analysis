@@ -1,0 +1,41 @@
+%itemize
+\newcommand{\bit}{\begin{itemize}}
+\newcommand{\eit}{\end{itemize}}
+
+%enumerate
+\newcommand{\ben}{\begin{enumerate}}
+\newcommand{\een}{\end{enumerate}}
+
+%Blue box
+\newcommand{\bB}[1]{\begin{problock}{#1}}
+\newcommand{\eB}{\end{problock}}
+
+%Green box
+\newcommand{\bG}[1]{\begin{exampleblock}{#1}}
+\newcommand{\eG}{\end{exampleblock}}
+
+%Red box
+\newcommand{\bR}[1]{\begin{alertblock}{#1}}
+\newcommand{\eR}{\end{alertblock}}
+
+%colors
+\definecolor{dB}{RGB}{80,13,138}
+\definecolor{lB}{RGB}{153,0,153}
+
+\definecolor{dG}{rgb}{0.00,0.50,0.00}
+\definecolor{lG}{rgb}{0.71,0.81,0.69}
+
+%custom blocks
+
+\newenvironment<>{problock}[1]{%
+  \begin{actionenv}#2%
+      \def\insertblocktitle{#1}%
+      \par%
+      \mode<presentation>{%
+       \setbeamercolor{block title}{fg=white,bg=Plum}
+       \setbeamercolor{block body}{fg=black,bg=lightpurple}
+       \setbeamercolor{itemize item}{fg=Plum}
+       \setbeamertemplate{itemize item}[triangle]
+     }%
+      \usebeamertemplate{block begin}}
+    {\par\usebeamertemplate{block end}\end{actionenv}}

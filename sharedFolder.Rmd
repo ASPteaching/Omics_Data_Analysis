@@ -1,6 +1,0 @@
-Use this folder to submit your exercises
-
-[https://drive.google.com/drive/folders/1M45lSJLl81rFkWFTpRX_P9YQAgq1163t?usp=sharing](https://drive.google.com/drive/folders/1M45lSJLl81rFkWFTpRX_P9YQAgq1163t?usp=sharing)
-
-The folder may contain some sub-directories to which you should not have access, so to submit a file, just drag it onto the main "Omics_techniques" folder.
-

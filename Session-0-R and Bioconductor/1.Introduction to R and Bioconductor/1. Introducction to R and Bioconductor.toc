@@ -1,0 +1,4 @@
+\beamer@endinputifotherversion {3.24pt}
+\beamer@sectionintoc {1}{Objectives}{3}{0}{1}
+\beamer@sectionintoc {2}{Introduction to R}{5}{0}{2}
+\beamer@sectionintoc {3}{Bioconductor}{12}{0}{3}

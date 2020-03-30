@@ -1,0 +1,44 @@
+\frametitle {Rsubread}
+\begin{columns}
+\begin{column}{0.3\textwidth}
+  \bit
+      \item a package to align short read in R!
+      \item If you have a session on vuori you can try that code slightly modified in the R file to use only chromosome 1
+  \eit
+  \end{column}
+
+\begin{column}{0.6\textwidth}
+ \begin{uncoverenv}
+\begin{Schunk}
+\begin{Sinput}
+> ## write the human genome sequences
+> writeXStringSet(Reduce(append,
++ lapply(seqnames(Hsapiens),
++ function(nam)
++ {dss<-DNAStringSet(unmasked(Hsapiens[[nam]]))
++ names(dss)<-nam
++ dss})),file="hg19.fa")
+> ##create the indexes
+> require(Rsubread)
+> dir.create("indexes")
+> buildindex(basename=file.path("indexes","hg19"),
++            reference="hg19.fa")
+> ## align the reads
+> sapply(dir(pattern="*\\.gz$"),function(fil){
++   ## decomplress the files
++   gunzip(fil)
++   ##align
++   align(index=file.path("indexes","hg19"),
++         readfile1=sub("\\.gz$","",fil),
++         nsubreads=2, TH1=1,
++         output_file=sub("\\.fastq\\.gz$","\\,sam",fil))
++   ## create bam files
++   asBAM(file=sib("\\.fastq\\.gz$","\\.sam",fil),
++         destination=sub("\\.fastq\\.gz$","",fil),
++         indexDestination=TRUE)
++   })
+\end{Sinput}
+\end{Schunk}
+       \end{uncoverenv}
+  \end{column}
+\end{columns}
