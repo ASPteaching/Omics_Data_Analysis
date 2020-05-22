@@ -99,13 +99,11 @@ In this example we want to check the effect of knocking out a gene (â€œKO vs WTâ
 This study was published in the Journal of Leukocyte
 Biology (2006;79:1314-1327). 
 
-The database that contained the study has been deprectaed but information on all the characteristics of the dataset and the experiment is still available from the following link: ftp://caftpd.nci.nih.gov/pub/caARRAY/experiments/caArray_bonda-00136/Readme.txt, and, what is more useful __the data for this study had been uploaded into the Gene Expression Omnibus (GEO). The dataset selected is identified with the accession number: GSE68580__,
+The database that contained the study has been deprecated but information on all the characteristics of the dataset and the experiment is still available from the following link: ftp://caftpd.nci.nih.gov/pub/caARRAY/experiments/caArray_bonda-00136/Readme.txt, and, what is more useful __the data for this study had been uploaded into the Gene Expression Omnibus (GEO). The dataset selected is identified with the accession number: GSE68580__,
 
-The goal of the experiment which generated the data was to understand the molecular basis of processes regulated by
-a molecule (cytokine) in aged mouse.
+The goal of the experiment which generated the data was to understand the molecular basis of processes regulated by a molecule (cytokine) in aged mouse.
 
-To do this a microarray analysis was 
-performed on RNA from resting and lipopolysaccharide (LPS) stimulated mice using the Affymetrix Mouse Genome 430 2.0 gene chip.
+To do this, a microarray analysis was performed on RNA from resting and lipopolysaccharide (LPS) stimulated mice using the Affymetrix Mouse Genome 430 2.0 gene chip.
 
 
 

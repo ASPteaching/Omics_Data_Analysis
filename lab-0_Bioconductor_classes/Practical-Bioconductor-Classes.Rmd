@@ -78,7 +78,7 @@ For example if we want to make a principal components analysis and plot the grou
 pcs <- prcomp(expressionValues)
 names(pcs)
 barplot(pcs$sdev)
-plot(pcs$rotation[,1], pcs$rotation[,2], col=targets$group, main="Representation of first two principal components")
+plot(pcs$rotation[,1], pcs$rotation[,2], main="Representation of first two principal components")
 text(pcs$rotation[,1], pcs$rotation[,2],targets$sex)
 ```
 
@@ -236,8 +236,6 @@ myEset <- ExpressionSet(assayData=expressionValues,
 # show(myEset)
 ```
 
-
-
 ## Using objects of class <tt>ExpressionSet</tt>
 
 The advantage of working with <tt>ExpressionSets</tt> lies in the fact that action on the objects are done in such a way that its consistency is ensured. That means for instance that if we subset the <tt>ExpressionSet</tt> it is automatically done on the columns of the expressions and on the rows of the covariates and it is no possible that a distinct row/column are removed.
@@ -285,10 +283,10 @@ head(pData(youngEset))
 ## Exercise
 
 1. Select a GEO dataset and prepare, from it, the components we have seen in the sections above, that is: The expression values, in a matrix or data.frame, the targets in a data frame, the experiment description, and information about annotations and gene names (you may obtain these from the matrix rownames).
-1. Proceed as above and create first the pieces needed to create the <tt>ExpressionSet</tt> and then an object of class <tt>ExpressionSet</tt> with all the data and its information.
-1. Reproduce the data exploration done in the first exercise accessing the data through the <tt>ExpressionSet</tt>.
-1. Do some subsetting and check the consistency of the results obtained.
-1. Add these steps to a new section in your "Exercise 1" document. Render the new document and when you are satisfied with it update your giyhub repository.
+2. Proceed as above and create first the pieces needed to create the <tt>ExpressionSet</tt> and then an object of class <tt>ExpressionSet</tt> with all the data and its information.
+3. Reproduce the data exploration done in the first exercise accessing the data through the <tt>ExpressionSet</tt>.
+4. Do some subsetting and check the consistency of the results obtained.
+5. Add these steps to a new section in your "Exercise 1" document. Render the new document and when you are satisfied with it update your giyhub repository.
 
 
 # The <tt>GEOquery package</tt>
@@ -305,12 +303,17 @@ Getting data from GEO is really quite easy. There is only one command that is ne
 
 This one function interprets its input to determine how to get the data from GEO and then parse the data into useful R data structures. Usage is quite simple.
 
+To illustrate this we will use data from a study on Effect of the thermogenic gene program during adipocyte differentiation. The data for this study had been uploaded into the Gene Expression Omnibus (GEO). The dataset selected is identified with the accession number: GSE100924.
+
+More information about the study can be found in GEO and in lab2 "Exercies in linear models and experimental design"
+
+
 ```{r }
 if (!require(GEOquery)) {
   BiocManager::install("GEOquery")
 }
 require(GEOquery)
-gse <- getGEO("GSE507")
+gse <- getGEO("GSE100924")
 class(gse)
 names(gse)
 gse[[1]]
@@ -318,6 +321,26 @@ esetFromGEO <- gse[[1]]
 ```
 
 The downloaded object is an <tt>ExpressionSet</tt> stored in a list. This means that instead of doing the painful process of creating the object step by step one can simply download it from GEO and start using it as in the previous section.
+
+Notice that you can use the _extractor_ methods `exprs`, `pdata` or `annotation` to extract information such as the expression matrix, the covariates and groups or the name of the annotations.
+
+```{r}
+head(exprs(esetFromGEO))
+```
+
+Before extracting the phenodata object it is good to look at which fields it contains.
+
+```{r}
+colnames(pData(esetFromGEO))
+```
+Many of these columns contain repeated informations (a non-efficient way to store information about the study in the same table as the groups information).
+
+The relevant information for the analysis seems to be in columns 38 to 41:  "cold exposure:ch1", "gender:ch1" , "genotype:ch1", "tissue:ch1".
+
+```{r}
+pData(esetFromGEO)[,c("cold exposure:ch1", "gender:ch1" , "genotype:ch1", "tissue:ch1")]
+```
+
 
 
 ## Exercise

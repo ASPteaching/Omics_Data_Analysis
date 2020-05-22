@@ -1,0 +1,26 @@
+---
+title: "My first Rmarkdown"
+author: "Alex Sanchez"
+date: "12/5/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+My data are as follows:
+
+```{r}
+for(i in 1:3){
+    set.seed(1234567)
+    x<- runif(100)
+  print(mean(x))
+}
+```
+And this is the distribution
+
+```{r}
+hist(x)
+```
+

@@ -152,7 +152,7 @@ print(eset)
 
 
 #---------------------------------------------------------------------------------------------
-###DIFERENTIAL EXPRESSED GENES SELECTION. LINEAR MODELS. COMPARITIONS
+### DIFERENTIAL EXPRESSED GENES SELECTION. LINEAR MODELS. COMPARITIONS
 #---------------------------------------------------------------------------------------------
 library(limma)
 

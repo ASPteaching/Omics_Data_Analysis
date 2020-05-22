@@ -91,16 +91,13 @@ In this example we want to check the effect of knocking out a gene (â€œKO vs WTâ
 
 ## 5. Molecular basis of age-associated cytokine dysregulation in LPS-stimulated macrophages
 
-This study was published in the Journal of Leukocyte
-Biology (2006;79:1314-1327).  
+This study was published in the Journal of Leukocyte Biology (2006;79:1314-1327).  
 
-The goal of the experiment which generated the data was to understand the molecular basis of processes regulated by
-a molecule (cytokine) in aged mouse.
+The goal of the experiment which generated the data was to understand the molecular basis of processes regulated by a molecule (cytokine) in aged mouse.
 
-To do this a microarray analysis was 
-performed on RNA from resting and lipopolysaccharide (LPS) stimulated mice using the Affymetrix Mouse Genome 430 2.0 gene chip.
+To do this a microarray analysis was performed on RNA from resting and lipopolysaccharide (LPS) stimulated mice using the Affymetrix Mouse Genome 430 2.0 gene chip.
 
-The database that contained the study has been deprectaed but information on all the characteristics of the dataset and the experiment can be found in the following link: ftp://caftpd.nci.nih.gov/pub/caARRAY/experiments/caArray_bonda-00136/Readme.txt
+The database that contained the study, `caarray` has been deprectaed but information on all the characteristics of the dataset and the experiment has been moved to Gene Expression Omnibus database, with study ID: [GSE68580](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE68580) 
 
 1. Identify the experimental factors and their levels.
 2. Write down the design matrix associated with this study design.
